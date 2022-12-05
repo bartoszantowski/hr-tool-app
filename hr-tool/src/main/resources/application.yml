@@ -1,0 +1,45 @@
+spring:
+  profiles:
+    active: 'loadInitialData'
+  mail:
+    host: 'smtp.mailtrap.io'
+    port: 587
+    username: 'a6a2795d3cb14c'
+    password: '9ca51efc9ba747'
+    properties:
+      mail:
+        smtp:
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+  datasource:
+    url: "jdbc:h2:mem:testdb"
+    driver-class-name: "org.h2.Driver"
+    username: "sa"
+    password: "password"
+  h2:
+    console:
+      enabled: true # app will be available on http://localhost:8080/h2-console
+mail:
+  from: 'hr-application@company.com'
+  recruitment:
+    hired:
+      subject: 'You are hired!'
+      bodyTemplate: 'Congratulations %s %s! You were hired! Your hiring manager will contact with You soon!'
+
+reports:
+  salary:
+    scheduling:
+      cron: '0 30 12 * * MON-FRI'
+      timezone: 'Europe/Warsaw'
+
+management:
+  endpoints:
+    web:
+      exposure.include: "*"
+
+logging:
+  level:
+    root: INFO
+    com.iitrab.hrtool: DEBUG

@@ -1,0 +1,30 @@
+package com.iitrab.hrtool.department.api;
+
+import javax.persistence.EntityManager;
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * API interface for query operations on the {@link Department} entities.
+ * Implementation does not have to open new DB transaction. If the returned data has to be managed by the {@link EntityManager},
+ * then the caller must open the transaction itself.
+ */
+public interface DepartmentProvider {
+
+    /**
+     * Returns the department based on its ID.
+     * If the department with given ID is not found, then {@link Optional#empty()} will be returned.
+     *
+     * @param departmentId id of the department to search
+     * @return {@link Optional} containing found department or {@link Optional#empty()} if not found
+     */
+    Optional<Department> getDepartment(Long departmentId);
+
+    /**
+     * Returns all departments.
+     *
+     * @return {@link List} of all departments
+     */
+    List<Department> getAllDepartments();
+
+}
