@@ -24,6 +24,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -102,10 +103,17 @@ class RecruitmentServiceTest {
         BigDecimal salary = BigDecimal.valueOf(5000);
         Grade grade = Grade.B;
         String position = "test";
-        Candidate candidate = SampleTestDataFactory.candidate(RecruitmentStatus.ACCEPTED);
+        //Candidate candidate = SampleTestDataFactory.candidate(RecruitmentStatus.ACCEPTED);
+
+        Candidate candidate = new Candidate("Tom", "Ayk", LocalDate.of(1990, 11, 23), "tom.ayk@gmail.com");
+
+
         Employee employee2 = SampleTestDataFactory.employee();
         String employeeEmail = candidate.getName() + candidate.getLastName() + "@company.com";
-        Employee employee = new Employee(candidate.getName(), candidate.getLastName(), candidate.getBirthdate(), candidate.getPrivateEmail());
+        //Employee employee = new Employee(candidate.getName(), candidate.getLastName(), candidate.getBirthdate(), candidate.getPrivateEmail());
+        Employee employee = new Employee(candidate.getName(), candidate.getLastName(), candidate.getBirthdate(), employeeEmail);
+        //Employee employee2 = new Employee(candidate.getName(), candidate.getLastName(), candidate.getBirthdate(), employeeEmail);
+
         Department department = new Department("HR", employee);
         //Contract contract = new Contract(employee, contractStartDate, contractEndDate, department, salary, grade, position);
 
@@ -113,14 +121,35 @@ class RecruitmentServiceTest {
         FinalizeRecruitmentRequest finalizeRecruitmentRequest = new FinalizeRecruitmentRequest(hrEmployeeId, candidateId, contractStartDate, contractEndDate,
                 departmentId, salary, grade, position);
 
+        FinalizedRecruitmentDto finalizedRecruitmentDto = new FinalizedRecruitmentDto(
+                10L,
+                employee.getName(),
+                employee.getLastName(),
+                employee.getBirthdate(),
+                employeeEmail,
+                10L,
+                contractStartDate,
+                contractEndDate,
+                departmentId,
+                department.getName(),
+                salary,
+                grade.toString(),
+                position
+        );
+
         //when(recruitmentCandidateService.prepareCandidate(candidateId)).thenReturn(Optional.empty());
 
         when(recruitmentCandidateService.prepareCandidate(candidateId)).thenReturn(candidate);
-        when(employeeService.createEmployee(employee)).thenReturn(employee);
-        when(emailGenerator.generateEmail(candidate.getName(), candidate.getLastName()))
-                .thenReturn(candidate.getName()+candidate.getLastName()+"@company.com");
-        when(candidateProviderMock.getCandidate(candidateId)).thenReturn(Optional.of(candidate));
+        when(emailGenerator.generateEmail(candidate.getName(), candidate.getLastName())).thenReturn(employeeEmail);
+        when(employeeService.createEmployee(any())).thenReturn(employee);
+
+        //when(emailGenerator.generateEmail(candidate.getName(), candidate.getLastName()))
+               // .thenReturn(candidate.getName()+candidate.getLastName()+"@company.com");
+
+        //when(candidateProviderMock.getCandidate(candidateId)).thenReturn(Optional.of(candidate));
         when(departmentProvider.getDepartment(departmentId)).thenReturn(Optional.of(department));
+        when(finalizedRecruitmentMapper.toDto(any(), any(), any())).thenReturn(finalizedRecruitmentDto);
+
         //when(contractService.createContract(contract)).thenReturn(contract);
 //        doThrow(new DepartmentNotFoundException(departmentId)).when(departmentProvider).getDepartment(departmentId);
 //
@@ -128,7 +157,7 @@ class RecruitmentServiceTest {
 //                .isInstanceOf(DepartmentNotFoundException.class);
 
         FinalizedRecruitmentDto expected = recruitmentService.finalizeRecruitment(finalizeRecruitmentRequest);
-        System.out.println(expected);
+        //System.out.println(expected);
 
         FinalizedRecruitmentDtoAssert.assertThatFinalizedRecruitmentDto(expected)
                 .hasEmployeeName(candidate.getName())
