@@ -1,0 +1,52 @@
+HR-TOOL-APP
+
+1) CRUD Client API:
+- listing basic information about all customers saved in the system (only customer ID and name)
+- downloading details about the selected client (ID, name, contact information and information about the responsible manager - his ID, name, surname and email)
+- creating a new client
+- deletion of the client
+- searching for customers by name, case-insensitive, searching by part of the name (returned only ID and customer name)
+- searching for clients by manager (returned only ID and name of the client)
+- searching for customers by name and/or manager (only customer ID and name)
+
+2) CRUD Department API:
+- listing basic information about all departments saved in the system (only department ID and name)
+- downloading details of the selected department (ID, name and information about the responsible manager -
+   his ID, name, surname and email)
+- creation of a new department
+- change of the manager responsible for the department
+- delete a section
+- searching for departments by name, case-insensitive, searching by part of the name (returned only ID and department name)
+- searching for departments by manager (returned only ID and department name)
+
+3) AOP - The logging aspect of service method calls (the ability to control the execution of the program code using application logs)
+- started when calling methods of public services (classes annotated with `@Service`)
+- log information about the method before and after calling the method
+
+4) Project Message API (the ability to send messages to other people working in the project)
+- sending an email to all current project members
+- the message sent to employees should contain information about: the sender, the name of the project and additional text sent by the sender
+- only current project member can send a message
+
+5) Web API to support the recruitment process (the possibility of finalizing the candidate recruitment process for the company)
+- changing the recruitment status of the candidate to `HIRED`
+- creating a contract for the candidate in the appropriate department, containing his position, grade, salary and its start and end duration
+- creating an employee in the database. The employee's email address should be generated in the format `firstname.lastname@company.com`. If this address is already occupied by another employee, then the counter `firstname.surnamecounter@company.com` should be added to it, e.g. `Jan.Smith3@company.com`
+- sending an email to the employee's private email address about the successful completion of the recruitment process - the message should contain the name and surname of the candidate
+- only an accepted candidate (status `ACCEPTED`) can be hired
+
+6) Periodical sending of salary reports (department manager, is to receive a cyclical report containing information about people employed in my department and their earnings)
+- call every day from Monday to Friday at 12:30 (time zone `Europe/Warsaw`)
+- generate a payroll report for department employees (separate report for each department)
+- send the generated report to the department manager to his email address
+- the report should contain: information about the department for which it was generated, date of generation, information about the department manager and a list of current employees of the department along with their earnings
+- employees of the department should be sorted by grade (F -> A1), then by salary (max -> min)
+- report in the format:
+```
+   SALARY REPORT <generated date>
+   Department <department name>
+   Manager <name, surname, email>
+   \t<name, surname, email, position, grade, earnings>
+   \t...
+```
+
