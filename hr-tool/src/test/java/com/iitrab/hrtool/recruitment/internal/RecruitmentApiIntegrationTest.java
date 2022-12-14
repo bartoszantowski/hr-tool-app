@@ -2,7 +2,6 @@ package com.iitrab.hrtool.recruitment.internal;
 
 import com.iitrab.hrtool.IntegrationTest;
 import com.iitrab.hrtool.IntegrationTestBase;
-import com.iitrab.hrtool.SampleTestDataFactory;
 import com.iitrab.hrtool.candidate.api.Candidate;
 import com.iitrab.hrtool.candidate.api.RecruitmentStatus;
 import com.iitrab.hrtool.contract.api.Grade;
@@ -83,5 +82,4 @@ class RecruitmentApiIntegrationTest extends IntegrationTestBase {
                         .hasContent(expectedContent));
 
     }
-
 }

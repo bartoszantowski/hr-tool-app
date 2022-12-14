@@ -44,13 +44,6 @@ class RecruitmentEmailSenderTest {
     @Captor
     private ArgumentCaptor<EmailDto> emailCaptor;
 
-
-//    @RegisterExtension
-//    protected static final GreenMailExtension GREEN_MAIL = new GreenMailExtension(ServerSetupTest.SMTP)
-//            .withConfiguration(GreenMailConfiguration.aConfig()
-//                    .withUser("user", "pass"))
-//            .withPerMethodLifecycle(true);
-
     @Test
     void shouldSendEmail_whenSendingEmail() {
         Candidate candidate = candidate(RecruitmentStatus.HIRED);
@@ -70,37 +63,4 @@ class RecruitmentEmailSenderTest {
                 .hasContent(expectedContent);
 
     }
-
-
-//    @Test
-//    void test() throws MessagingException, IOException {
-//
-//        String name = "Bob";
-//        String lastName = "Test";
-//        String privateMail = "bob.test@gmail.com";
-//
-//        String subject = "subject";
-//        String bodyTemplate = "Hello %s %s";
-//
-//        when(recruitmentMailPropertiesMock.getSubject()).thenReturn(subject);
-//        when(recruitmentMailPropertiesMock.getBodyTemplate()).thenReturn(bodyTemplate);
-//
-//
-//        EmailDto emailDto = new EmailDto(privateMail, subject, bodyTemplate);
-//
-//        emailSenderMock.send(emailDto);
-//
-//        MimeMessage[] receivedMessage = GREEN_MAIL.getReceivedMessages();
-//
-//        assertThat(receivedMessage).hasSize(1);
-//        assertThat(receivedMessage[0].getAllRecipients())
-//                .hasSize(1)
-//                .singleElement()
-//                .extracting(Address::toString)
-//                .isEqualTo(privateMail);
-//
-//        String content = (String) receivedMessage[0].getContent();
-//
-//        assertThat(content).isEqualTo("Hello Bob Test");
-//    }
 }
