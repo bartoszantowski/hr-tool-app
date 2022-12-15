@@ -21,6 +21,7 @@ import static com.iitrab.hrtool.mail.api.MimeMessageAssert.assertThatMimeMessage
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @IntegrationTest
@@ -32,6 +33,59 @@ class RecruitmentApiIntegrationTest extends IntegrationTestBase {
 
     @Autowired
     private RecruitmentMailProperties recruitmentMailProperties;
+
+    @Test
+    void shouldReturnFinalizedRecruitmentDto_whenFinalizingRecruitmentProcess() throws Exception {
+        Long hrEmployeeId = 2L;
+        LocalDate contractStartDate = LocalDate.of(2023, 1, 1);
+        LocalDate contractEndDate = LocalDate.of(2024, 1, 1);
+        BigDecimal salary = BigDecimal.valueOf(5000);
+        Grade grade = Grade.B;
+        String position = "test";
+        Department department = existingDepartment(department(existingEmployee(employee())));
+        Candidate candidate = existingCandidate(candidate(RecruitmentStatus.ACCEPTED));
+
+        String requestBody = """
+                                 {
+                                   "hrEmployeeId": %s,
+                                   "candidateId": %s,
+                                   "contractStartDate": "%s",
+                                   "contractEndDate": "%s",
+                                   "departmentId": %s,
+                                   "salary": %s,
+                                   "grade": "%s",
+                                   "position": "%s"
+                                 }
+                                 """.formatted(
+                hrEmployeeId,
+                candidate.getId(),
+                contractStartDate,
+                contractEndDate,
+                department.getId(),
+                salary,
+                grade.toString(),
+                position);
+
+        mockMvc.perform(post("/v1/recruitment")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andDo(log())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.employeeId").isNotEmpty())
+                .andExpect(jsonPath("$.employeeName").value(candidate.getName()))
+                .andExpect(jsonPath("$.employeeLastName").value(candidate.getLastName()))
+                .andExpect(jsonPath("$.birthdate").value(candidate.getBirthdate().toString()))
+                .andExpect(jsonPath("$.employeeEmail").value(candidate.getName() + "." + candidate.getLastName() + "@company.com"))
+                .andExpect(jsonPath("$.contractId").isNumber())
+                .andExpect(jsonPath("$.contractStartDate").value(contractStartDate.toString()))
+                .andExpect(jsonPath("$.contractEndDate").value(contractEndDate.toString()))
+                .andExpect(jsonPath("$.departmentId").value(department.getId()))
+                .andExpect(jsonPath("$.departmentName").value(department.getName()))
+                .andExpect(jsonPath("$.salary").value(salary))
+                .andExpect(jsonPath("$.grade").value(grade.toString()))
+                .andExpect(jsonPath("$.position").value(position));
+    }
+
 
     @Test
     void shouldSendEmail_whenHiringEmployee() throws Exception {
