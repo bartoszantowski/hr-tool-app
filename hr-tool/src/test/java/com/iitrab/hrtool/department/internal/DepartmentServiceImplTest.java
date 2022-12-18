@@ -26,7 +26,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class DepartmentServiceImplTest {
+class DepartmentServiceImplTest {
 
     @InjectMocks
     private DepartmentServiceImpl departmentService;
