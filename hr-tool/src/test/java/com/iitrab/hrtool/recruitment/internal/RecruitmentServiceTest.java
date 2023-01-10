@@ -3,6 +3,7 @@ package com.iitrab.hrtool.recruitment.internal;
 import com.iitrab.hrtool.candidate.api.Candidate;
 import com.iitrab.hrtool.candidate.api.CandidateNotFoundException;
 import com.iitrab.hrtool.candidate.api.RecruitmentStatus;
+import com.iitrab.hrtool.contract.api.ContractService;
 import com.iitrab.hrtool.contract.api.Grade;
 import com.iitrab.hrtool.department.api.Department;
 import com.iitrab.hrtool.department.api.DepartmentNotFoundException;
@@ -23,7 +24,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class RecruitmentServiceTest {
@@ -38,6 +39,13 @@ class RecruitmentServiceTest {
     private FinalizedRecruitmentMapper finalizedRecruitmentMapper;
     @Mock
     private EmailGenerator emailGenerator;
+
+    @Mock
+    private ContractService contractService;
+
+    @Mock
+    private RecruitmentEmailSender recruitmentEmailSender;
+
 
     @InjectMocks
     private RecruitmentService recruitmentService;
@@ -88,7 +96,7 @@ class RecruitmentServiceTest {
     void shouldReturnFinalizedRecruitmentDto_whenFinalizing() {
         Long hrEmployeeId = 2L;
         Long candidateId = 5L;
-        LocalDate contractStartDate = LocalDate.of(2023, 1, 1);
+        LocalDate contractStartDate = LocalDate.of(2023, 5, 1);
         LocalDate contractEndDate = LocalDate.of(2024, 1, 1);
         Long departmentId = 5L;
         BigDecimal salary = BigDecimal.valueOf(5000);
@@ -96,8 +104,6 @@ class RecruitmentServiceTest {
         String position = "test";
         Candidate candidate = new Candidate("Tom", "Ayk", LocalDate.of(1990, 11, 23), "tom.ayk@gmail.com");
 
-
-        Employee employee2 = SampleTestDataFactory.employee();
         String employeeEmail = candidate.getName() + candidate.getLastName() + "@company.com";
         Employee employee = new Employee(candidate.getName(), candidate.getLastName(), candidate.getBirthdate(), employeeEmail);
         Department department = new Department("HR", employee);
@@ -126,6 +132,7 @@ class RecruitmentServiceTest {
         when(employeeService.createEmployee(any())).thenReturn(employee);
         when(departmentProvider.getDepartment(departmentId)).thenReturn(Optional.of(department));
         when(finalizedRecruitmentMapper.toDto(any(), any(), any())).thenReturn(finalizedRecruitmentDto);
+        doNothing().when(recruitmentEmailSender).sendEmail(candidate.getName(), candidate.getLastName(), candidate.getPrivateEmail());
 
         FinalizedRecruitmentDto expected = recruitmentService.finalizeRecruitment(finalizeRecruitmentRequest);
 

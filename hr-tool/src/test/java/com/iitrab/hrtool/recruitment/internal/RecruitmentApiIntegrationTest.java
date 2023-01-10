@@ -37,7 +37,7 @@ class RecruitmentApiIntegrationTest extends IntegrationTestBase {
     @Test
     void shouldReturnFinalizedRecruitmentDto_whenFinalizingRecruitmentProcess() throws Exception {
         Long hrEmployeeId = 2L;
-        LocalDate contractStartDate = LocalDate.of(2023, 1, 1);
+        LocalDate contractStartDate = LocalDate.of(2023, 5, 1);
         LocalDate contractEndDate = LocalDate.of(2024, 1, 1);
         BigDecimal salary = BigDecimal.valueOf(5000);
         Grade grade = Grade.B;
@@ -90,7 +90,7 @@ class RecruitmentApiIntegrationTest extends IntegrationTestBase {
     @Test
     void shouldSendEmail_whenHiringEmployee() throws Exception {
         Long hrEmployeeId = 2L;
-        LocalDate contractStartDate = LocalDate.of(2023, 1, 1);
+        LocalDate contractStartDate = LocalDate.of(2023, 5, 1);
         LocalDate contractEndDate = LocalDate.of(2024, 1, 1);
         BigDecimal salary = BigDecimal.valueOf(5000);
         Grade grade = Grade.B;

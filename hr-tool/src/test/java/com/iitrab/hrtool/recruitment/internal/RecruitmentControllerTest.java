@@ -48,7 +48,7 @@ class RecruitmentControllerTest {
     void shouldReturnNotFound_whenFinalizingRecruitmentProcess_thatCandidateNotExist() throws Exception {
         Long hrEmployeeId = 2L;
         Long candidateId = 5L;
-        LocalDate contractStartDate = LocalDate.of(2023, 1, 1);
+        LocalDate contractStartDate = LocalDate.of(2023, 5, 1);
         LocalDate contractEndDate = LocalDate.of(2024, 1, 1);
         Long departmentId = 5L;
         BigDecimal salary = BigDecimal.valueOf(5000);
@@ -84,7 +84,7 @@ class RecruitmentControllerTest {
     void shouldReturnNotFound_whenFinalizingRecruitmentProcess_thatDepartmentNotExist() throws Exception {
         Long hrEmployeeId = 2L;
         Long candidateId = 5L;
-        LocalDate contractStartDate = LocalDate.of(2023, 1, 1);
+        LocalDate contractStartDate = LocalDate.of(2023, 5, 1);
         LocalDate contractEndDate = LocalDate.of(2024, 1, 1);
         Long departmentId = 5L;
         BigDecimal salary = BigDecimal.valueOf(5000);
@@ -167,7 +167,7 @@ class RecruitmentControllerTest {
     void FinalizedRecruitmentDto_whenFinalizingRecruitmentProcess_thatDepartmentNotExist() throws Exception {
         Long hrEmployeeId = 2L;
         Long candidateId = 5L;
-        LocalDate contractStartDate = LocalDate.of(2023, 1, 1);
+        LocalDate contractStartDate = LocalDate.of(2023, 5, 1);
         LocalDate contractEndDate = LocalDate.of(2024, 1, 1);
         Long departmentId = 5L;
         BigDecimal salary = BigDecimal.valueOf(5000);
